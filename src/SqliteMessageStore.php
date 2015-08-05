@@ -1,8 +1,5 @@
 <?php
-interface MessageStoreInterface
-{
-    public function saveMessage($from, $to, $txt, $id, $t);
-}
+namespace Whatsapp\ChatApi;
 
 class SqliteMessageStore implements MessageStoreInterface
 {
@@ -15,7 +12,7 @@ class SqliteMessageStore implements MessageStoreInterface
         $fileName = __DIR__ . DIRECTORY_SEPARATOR . self::DATA_FOLDER . DIRECTORY_SEPARATOR . 'msgstore-'.$number.'.db';
         $createTable = !file_exists($fileName);
 
-        $this->db = new \PDO("sqlite:" . $fileName, null, null, array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        $this->db = new \PDO("sqlite:" . $fileName, null, null, array(\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC, \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
         if ($createTable)
         {
             $this->db->exec('CREATE TABLE messages (`from` TEXT, `to` TEXT, message TEXT, id TEXT, t TEXT)');

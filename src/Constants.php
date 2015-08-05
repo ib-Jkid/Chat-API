@@ -1,9 +1,8 @@
 <?php
-
+namespace Whatsapp\ChatApi;
 class Constants
 {
-    /**
-     * Constant declarations.
+    /**Constant declarations.
      */
     const CONNECTED_STATUS = 'connected';                                                    // Describes the connection status with the WhatsApp server.
     const DISCONNECTED_STATUS = 'disconnected';                                              // Describes the connection status with the WhatsApp server.

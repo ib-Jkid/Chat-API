@@ -1,4 +1,6 @@
 <?php
+namespace Whatsapp\ChatApi;
+
 class TokenMap
 {
     private static $primaryStrings = array(

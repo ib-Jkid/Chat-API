@@ -1,4 +1,10 @@
 <?php
+
+namespace Whatsapp\ChatApi\Events;
+
+
+use Whatsapp\ChatApi\WhatsProt;
+
 abstract class AllEvents
 {
     protected $eventsToListenFor = array();

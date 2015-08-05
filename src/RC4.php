@@ -1,5 +1,8 @@
 <?php
-class rc4
+
+namespace Whatsapp\ChatApi;
+
+class RC4
 {
     private $s;
     private $i;

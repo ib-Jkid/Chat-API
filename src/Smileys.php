@@ -1,5 +1,9 @@
 <?php
 
+namespace Whatsapp\ChatApi;
+
+use Whatsapp\ChatApi\Exceptions\SmileyNotFoundException;
+
 /**
  * A class that stores the 845 smileys of WhatsApp
  *
@@ -14,7 +18,6 @@
  * http://appamatix.com/843-whatsapp-emoticons-meanings-emoji-list/
  */
 
-class SmileyNotFoundException extends Exception {};
 
 class Smileys {
     private $listSmileys = array(

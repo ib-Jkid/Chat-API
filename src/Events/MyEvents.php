@@ -1,5 +1,6 @@
 <?php
-require 'AllEvents.php';
+
+namespace Whatsapp\ChatApi\Events;
 
 class MyEvents extends AllEvents
 {

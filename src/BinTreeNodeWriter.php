@@ -1,5 +1,7 @@
 <?php
 
+namespace Whatsapp\ChatApi;
+
 class BinTreeNodeWriter
 {
     private $output;

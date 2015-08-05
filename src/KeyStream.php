@@ -6,8 +6,11 @@
  * Time: 11:55
  * To change this template use File | Settings | File Templates.
  */
-require_once("rc4.php");
-require_once("func.php");
+
+namespace Whatsapp\ChatApi;
+
+/*require_once("rc4.php");
+require_once("func.php");*/
 
 class KeyStream
 {
@@ -20,7 +23,7 @@ class KeyStream
 
     public function __construct($key, $macKey)
     {
-        $this->rc4    = new rc4($key, self::DROP);
+        $this->rc4    = new RC4($key, self::DROP);
         $this->macKey = $macKey;
     }
 
@@ -36,7 +39,7 @@ class KeyStream
         $nonce .= '0';
         for ($j = 0; $j < count($array); $j++) {
             $nonce[(strlen($nonce) - 1)] = chr($array2[$j]);
-            $foo                         = wa_pbkdf2("sha1", $password, $nonce, 2, 20, true);
+            $foo                         = Utility::wa_pbkdf2("sha1", $password, $nonce, 2, 20, true);
             $array[$j]                   = $foo;
         }
         return $array;
@@ -50,7 +53,7 @@ class KeyStream
             $foo = ord($buffer[$macOffset + $i]);
             $bar = ord($mac[$i]);
             if ($foo !== $bar) {
-                throw new Exception("MAC mismatch: $foo != $bar");
+                throw new \Exception("MAC mismatch: $foo != $bar");
             }
         }
         return $this->rc4->cipher($buffer, $offset, $length);

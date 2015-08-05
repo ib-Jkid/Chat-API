@@ -2,6 +2,9 @@
 /**
  * Media uploader class
  */
+
+namespace Whatsapp\ChatApi;
+
 class WhatsMediaUploader
 {
     protected static function sendData($host, $POST, $HEAD, $filepath, $mediafile, $TAIL)

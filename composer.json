@@ -21,6 +21,10 @@
         "source": "https://github.com/WHAnonymous/Chat-API"
     },
     "autoload": {
+        "psr-4":{
+            "Whatsapp\\ChatApi": "src"
+        },
+
         "classmap": [
             "src/"
         ]
