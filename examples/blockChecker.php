@@ -1,6 +1,7 @@
 <?php
 /*require_once('../src/whatsprot.class.php');
 require '../src//events/MyEvents.php';*/
+
 require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
 
 use Whatsapp\ChatApi\WhatsProt;

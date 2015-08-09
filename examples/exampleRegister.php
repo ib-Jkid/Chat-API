@@ -17,8 +17,8 @@ use Whatsapp\ChatApi\WhatsProt;
  */
 $debug = true;
 
-$username = '2348157732440';                      // Telephone number including the country code without '+' or '00'.
-$nickname = 'LectorAkoka';                         // This is the username displayed by WhatsApp clients.
+$username = '';                      // Telephone number including the country code without '+' or '00'.
+$nickname = '';                         // This is the username displayed by WhatsApp clients.
 
 // Create an instance of WhatsProt.
 $w = new WhatsProt($username, $nickname, $debug);
@@ -71,7 +71,7 @@ $w = new WhatsProt($username, $nickname, $debug);
  *   - currency: Currency price of account.
  *   - price_expiration: Price expiration in UNIX Timestamp.
  */
-$w->codeRegister('930013');
+$w->codeRegister('');
 
 // IT IS VERY IMPORTANT THAT YOU NOTE AND KEEP YOUR DETAILS.
 // YOU WILL NEED TO UPDATE THE SCRIPT WITH THE PASSWORD ETC.
