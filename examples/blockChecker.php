@@ -1,6 +1,9 @@
 <?php
-require_once('../src/whatsprot.class.php');
-require '../src//events/MyEvents.php';
+/*require_once('../src/whatsprot.class.php');
+require '../src//events/MyEvents.php';*/
+require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
+
+use Whatsapp\ChatApi\WhatsProt;
 
 $debug = true;
 
@@ -30,7 +33,4 @@ $w = new WhatsProt($username, '', $debug);
 $w->eventManager()->bind("onCredentialsBad", "onCredentialsBad");
 $w->eventManager()->bind("onCredentialsGood", "onCredentialsGood");
 
-
 $w->checkCredentials();
-
-?>

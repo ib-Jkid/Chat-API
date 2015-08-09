@@ -8,15 +8,17 @@
  *
  */
 
-require_once('../src/whatsprot.class.php');
+//require_once('../src/whatsprot.class.php');
+require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
 
+use Whatsapp\ChatApi\WhatsProt;
 /**
  * Config data.
  */
 $debug = true;
 
-$username = '34666554433';                      // Telephone number including the country code without '+' or '00'.
-$nickname = 'John Doe';                         // This is the username displayed by WhatsApp clients.
+$username = '2348157732440';                      // Telephone number including the country code without '+' or '00'.
+$nickname = 'LectorAkoka';                         // This is the username displayed by WhatsApp clients.
 
 // Create an instance of WhatsProt.
 $w = new WhatsProt($username, $nickname, $debug);
@@ -42,7 +44,7 @@ $w = new WhatsProt($username, $nickname, $debug);
  *   - method: Used method.
  *   - retry_after: Waiting time before requesting a new code.
  */
-$w->codeRequest('sms');
+//$w->codeRequest('sms');
 
 // You must wait until you receive a code from WhatsApp, either to your phone via sms
 // or phonecall depending on what you selected above.
@@ -69,7 +71,7 @@ $w->codeRequest('sms');
  *   - currency: Currency price of account.
  *   - price_expiration: Price expiration in UNIX Timestamp.
  */
-$w->codeRegister('123456');
+$w->codeRegister('930013');
 
 // IT IS VERY IMPORTANT THAT YOU NOTE AND KEEP YOUR DETAILS.
 // YOU WILL NEED TO UPDATE THE SCRIPT WITH THE PASSWORD ETC.

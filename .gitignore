@@ -8,5 +8,5 @@ composer.phar
 .DS_Store
 Thumbs.db
 *.dat
-
+*.lock
 *.db

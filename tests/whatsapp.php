@@ -1,5 +1,6 @@
 <?php
-require '../src/whatsprot.class.php';
+
+use Whatsapp\ChatApi\WhatsProt;
 
 function fgets_u($pStdn)
 {

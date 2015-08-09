@@ -504,7 +504,7 @@ class TokenMap
 
         $string = $tokenMap[$token];
         if (!$string) {
-            throw new Exception("Invalid token/length in GetToken");
+            throw new \Exception("Invalid token/length in GetToken");
         }
     }
 }

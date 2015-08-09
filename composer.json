@@ -1,6 +1,6 @@
 {
     "name": "whatsapp/chat-api",
-    "version": "2.5.2",
+    "version": "2.5.3",
     "description": "The PHP WhatsApp library",
     "license": "MIT",
     "keywords": [
@@ -22,15 +22,13 @@
     },
     "autoload": {
         "psr-4":{
-            "Whatsapp\\ChatApi": "src"
-        },
-
-        "classmap": [
-            "src/"
-        ]
+            "Whatsapp\\ChatApi\\": "src",
+            "Whatsapp\\ChatApi\\Events\\": "src/Events",
+            "Whatsapp\\ChatApi\\Exceptions\\": "src/Exceptions"
+        }
     },
     "require": {
-        "php": ">=5.3",
+        "php": ">=5.3.0",
         "ext-curl": "*",
         "ext-gd" : "*",
         "ext-sockets" : "*",

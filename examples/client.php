@@ -1,11 +1,15 @@
+#!/usr/local/bin/php
 <?php
 /*************************************
  * Autor: mgp25                      *
  * Github: https://github.com/mgp25  *
  *************************************/
-require_once '../src/whatsprot.class.php';
+require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
+
+use Whatsapp\ChatApi\WhatsProt;
+
 //Change the time zone if you are in a different country
-date_default_timezone_set('Europe/Madrid');
+date_default_timezone_set('Africa/Lagos');
 
 echo "####################################\n";
 echo "#                                  #\n";
@@ -21,7 +25,7 @@ $password = "";
 $nickname = "";
 $debug = false;
 /////////////////////////////////////////////////////
-if ($_SERVER['argv'][1] == null) {
+if (!isset($_SERVER['argv'][1])) {
     echo "USAGE: php ".$_SERVER['argv'][0]." <number> \n\nEj: php client.php 34123456789\n\n";
     exit(1);
 }

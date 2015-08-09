@@ -1,16 +1,19 @@
 <?php
 set_time_limit(10);
-require_once '../src/whatsprot.class.php';
+require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
+
+use Whatsapp\ChatApi\WhatsProt;
+use Whatsapp\ChatApi\Constants;
 //Change to your time zone
-date_default_timezone_set('Europe/Madrid');
+date_default_timezone_set('Africa/Lagos');
 
 ########## DO NOT COMMIT THIS FILE WITH YOUR CREDENTIALS ###########
 ///////////////////////CONFIGURATION///////////////////////
 //////////////////////////////////////////////////////////
-$username = "**your phone number**";                      // Telephone number including the country code without '+' or '00'.
-$password = "**server generated whatsapp password**";     // Use registerTool.php or exampleRegister.php to obtain your password
-$nickname = "**your nickname**";                          // This is the username (or nickname) displayed by WhatsApp clients.
-$target = "**contact's phone number**";                   // Destination telephone number including the country code without '+' or '00'.
+$username = "";                      // Telephone number including the country code without '+' or '00'.
+$password = "";     // Use registerTool.php or exampleRegister.php to obtain your password
+$nickname = "";                          // This is the username (or nickname) displayed by WhatsApp clients.
+$target = "";                   // Destination telephone number including the country code without '+' or '00'.
 $debug = false;                                           // Set this to true, to see debug mode.
 ///////////////////////////////////////////////////////////
 
@@ -56,31 +59,52 @@ function onPresenceUnavailable($username, $from, $last)
     echo "<$dFrom is offline>\n\n";
 }
 
+function onSendMessage($mynumber, $target, $messageId, $node){
+    echo "Message from: $mynumber to $target with ID $messageId\n";
+    print_r($node);
+}
+
+function onSendMessageReceived($mynumber, $id, $from, $type){
+    echo "Message has been received by target\n";
+    echo "$mynumber :: $id :: $from :: $type\n";
+}
+
+function onLoginFailed($mynumber, $data){
+    echo "Login to Whatsapp with $mynumber failed\n";
+    print_r($data);
+}
+
+function onLoginSuccess ($mynumber, $kind,  $status, $creation, $expiration){
+    echo "Login to Whatsapp Success\n";
+    echo "$mynumber :: $kind :: $status :: $creation :: $expiration\n";
+}
 echo "[] Logging in as '$nickname' ($username)\n";
 //Create the whatsapp object and setup a connection.
 $w = new WhatsProt($username, $nickname, $debug);
 $w->connect();
 
 // Now loginWithPassword function sends Nickname and (Available) Presence
+$w->eventManager->bind("onLoginFailed", "onLoginFailed");
+$w->eventManager->bind("onLoginSuccess", "onLoginSuccess");
 $w->loginWithPassword($password);
 
 //Retrieve large profile picture. Output is in /src/php/pictures/ (you need to bind a function
 //to the event onProfilePicture so the script knows what to do.
-$w->eventManager()->bind("onGetProfilePicture", "onGetProfilePicture");
-$w->sendGetProfilePicture($target, true);
+//$w->eventManager()->bind("onGetProfilePicture", "onGetProfilePicture");
+//$w->sendGetProfilePicture($target, true);
 
 //Print when the user goes online/offline (you need to bind a function to the event onPressence
 //so the script knows what to do)
-$w->eventManager()->bind("onPresenceAvailable", "onPresenceAvailable");
-$w->eventManager()->bind("onPresenceUnavailable", "onPresenceUnavailable");
+//$w->eventManager()->bind("onPresenceAvailable", "onPresenceAvailable");
+//$w->eventManager()->bind("onPresenceUnavailable", "onPresenceUnavailable");
 
 echo "[*] Connected to WhatsApp\n\n";
 
 //update your profile picture
-$w->sendSetProfilePicture("demo/venom.jpg");
+//$w->sendSetProfilePicture("demo/venom.jpg");
 
 //send picture
-$w->sendMessageImage($target, "demo/x3.jpg");
+//$w->sendMessageImage($target, "demo/x3.jpg");
 
 //send video
 //$w->sendMessageVideo($target, 'http://techslides.com/demos/sample-videos/small.mp4');
@@ -92,17 +116,19 @@ $w->sendMessageImage($target, "demo/x3.jpg");
 //$w->sendLocation($target, '4.948568', '52.352957');
 
 // Implemented out queue messages and auto msgid
+$w->eventManager->bind("onSendMessage", "onSendMessage");
+$w->eventManager->bind("onSendMessageReceived", "onSendMessageReceived");
 $w->sendMessage($target, "Guess the number :)");
 $w->sendMessage($target, "Sent from WhatsApi at " . date('H:i'));
 
-while($w->pollMessage());
+//while($w->pollMessage());
 
 /**
  * You can create a ProcessNode class (or whatever name you want) that has a process($node) function
  * and pass it through setNewMessageBind, that way everytime the class receives a text message it will run
  * the process function to it.
  */
-$pn = new ProcessNode($w, $target);
+/*$pn = new ProcessNode($w, $target);
 $w->setNewMessageBind($pn);
 
 echo "\n\nYou can also write and send messages to $target (interactive conversation)\n\n> ";
@@ -136,7 +162,7 @@ while (1) {
                 break;
         }
     }
-}
+}*/
 
 /**
  * Demo class to show how you can process inbound messages

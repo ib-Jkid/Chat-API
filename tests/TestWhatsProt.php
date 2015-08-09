@@ -1,5 +1,8 @@
 <?php
-require_once '../src/whatsprot.class.php';
+
+use Whatsapp\ChatApi\WhatsProt;
+use Whatsapp\ChatApi\ProtocolNode;
+
 
 /**
  * Used to expose protected methods to the testing framework.

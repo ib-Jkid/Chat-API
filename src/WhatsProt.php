@@ -36,6 +36,7 @@ class WhatsProt
     protected $serverReceivedId;        // Confirm that the *server* has received your command.
     protected $socket;                  // A socket to connect to the WhatsApp network.
     protected $writer;                  // An instance of the BinaryTreeNodeWriter class.
+    protected $dataDirectory;           // Directory for saving identity files, challenge file, etc
     protected $messageStore;
     protected $nodeId = array();
     protected $loginTime;
@@ -53,19 +54,22 @@ class WhatsProt
      *   Debug on or off, false by default.
      * @param mixed $identityFile
      *  Path to identity file, overrides default path
+     * @param mixed
+     * Path to Data Directory
      */
-    public function __construct($number, $nickname, $debug = false, $identityFile = false)
+    public function __construct($number, $nickname, $debug = false, $identityFile = false, $dataDirectory = false)
     {
         $this->writer = new BinTreeNodeWriter();
         $this->reader = new BinTreeNodeReader();
         $this->debug = $debug;
         $this->phoneNumber = $number;
+        $this->dataDirectory = $dataDirectory ? $dataDirectory : Constants::DATA_FOLDER;
 
         //e.g. ./cache/nextChallenge.12125557788.dat
         $this->challengeFilename = sprintf('%s%s%snextChallenge.%s.dat',
             __DIR__,
             DIRECTORY_SEPARATOR,
-            Constants::DATA_FOLDER . DIRECTORY_SEPARATOR,
+            $this->dataDirectory . DIRECTORY_SEPARATOR,
             $number);
 
         $this->identity = $this->buildIdentity($identityFile);
@@ -122,6 +126,7 @@ class WhatsProt
         if (!$phone = $this->dissectPhone()) {
             throw new \Exception('The provided phone number is not valid.');
         }
+
 
         $countryCode = ($phone['ISO3166'] != '') ? $phone['ISO3166'] : 'US';
         $langCode    = ($phone['ISO639'] != '') ? $phone['ISO639'] : 'en';
@@ -217,7 +222,7 @@ class WhatsProt
         );
 
         $response = $this->getResponse($host, $query);
-
+        print_r($response);
 
         if ($response->status != 'ok') {
             $this->eventManager->fire("onCodeRegisterFailed",
@@ -2284,7 +2289,7 @@ class WhatsProt
     protected function buildIdentity($identity_file = false)
     {
         if ($identity_file === false)
-            $identity_file = sprintf('%s%s%sid.%s.dat', __DIR__, DIRECTORY_SEPARATOR, Constants::DATA_FOLDER . DIRECTORY_SEPARATOR, $this->phoneNumber);
+            $identity_file = sprintf('%s%s%sid.%s.dat', __DIR__, DIRECTORY_SEPARATOR, $this->dataDirectory . DIRECTORY_SEPARATOR, $this->phoneNumber);
 
         if (is_readable($identity_file)) {
             $data = urldecode(file_get_contents($identity_file));
@@ -2431,7 +2436,7 @@ class WhatsProt
             $this->mediaFileInfo['filesize'] = strlen($media);
 
             if ($this->mediaFileInfo['filesize'] < $maxsizebytes) {
-                $this->mediaFileInfo['filepath'] = tempnam(__DIR__ . DIRECTORY_SEPARATOR . Constants::DATA_FOLDER . DIRECTORY_SEPARATOR . Constants::MEDIA_FOLDER, 'WHA');
+                $this->mediaFileInfo['filepath'] = tempnam(__DIR__ . DIRECTORY_SEPARATOR . $this->dataDirectory . DIRECTORY_SEPARATOR . Constants::MEDIA_FOLDER, 'WHA');
                 file_put_contents($this->mediaFileInfo['filepath'], $media);
                 $this->mediaFileInfo['filemimetype']  =Utility::get_mime($this->mediaFileInfo['filepath']);
                 $this->mediaFileInfo['fileextension'] = Utility::getExtensionFromMime($this->mediaFileInfo['filemimetype']);
@@ -3471,9 +3476,9 @@ class WhatsProt
             $url = $media->getAttribute("url");
 
             //save thumbnail
-            file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . Constants::DATA_FOLDER . DIRECTORY_SEPARATOR . Constants::MEDIA_FOLDER . DIRECTORY_SEPARATOR . 'thumb_' . $filename, $media->getData());
+            file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . $this->dataDirectory . DIRECTORY_SEPARATOR . Constants::MEDIA_FOLDER . DIRECTORY_SEPARATOR . 'thumb_' . $filename, $media->getData());
             //download and save original
-            file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . Constants::DATA_FOLDER . DIRECTORY_SEPARATOR . Constants::MEDIA_FOLDER . DIRECTORY_SEPARATOR . $filename, file_get_contents($url));
+            file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . $this->dataDirectory . DIRECTORY_SEPARATOR . Constants::MEDIA_FOLDER . DIRECTORY_SEPARATOR . $filename, file_get_contents($url));
         }
     }
 
@@ -3488,9 +3493,9 @@ class WhatsProt
 
         if ($pictureNode != null) {
             if ($pictureNode->getAttribute("type") == "preview") {
-                $filename = __DIR__ . DIRECTORY_SEPARATOR . Constants::DATA_FOLDER . DIRECTORY_SEPARATOR . Constants::PICTURES_FOLDER . DIRECTORY_SEPARATOR . 'preview_' . $node->getAttribute('from') . 'jpg';
+                $filename = __DIR__ . DIRECTORY_SEPARATOR . $this->dataDirectory . DIRECTORY_SEPARATOR . Constants::PICTURES_FOLDER . DIRECTORY_SEPARATOR . 'preview_' . $node->getAttribute('from') . 'jpg';
             } else {
-                $filename = __DIR__ . DIRECTORY_SEPARATOR . Constants::DATA_FOLDER . DIRECTORY_SEPARATOR . Constants::PICTURES_FOLDER . DIRECTORY_SEPARATOR . $node->getAttribute('from') . '.jpg';
+                $filename = __DIR__ . DIRECTORY_SEPARATOR . $this->dataDirectory . DIRECTORY_SEPARATOR . Constants::PICTURES_FOLDER . DIRECTORY_SEPARATOR . $node->getAttribute('from') . '.jpg';
             }
 
             file_put_contents($filename, $pictureNode->getData());

@@ -32,7 +32,7 @@
  * Enjoy.
  *
  */
-//This is a aimple password to view this script. It is NOT the whatsapp password.
+//This is a simple password to view this script. It is NOT the whatsapp password.
 $config['webpassword'] = 'MakeUpPassword';
 
 //Config Template
@@ -70,7 +70,7 @@ $config['YOURNAME'] = array(
  * NOTHING ELSE TO EDIT BELOW THIS LINE.
  *
  */
-require '../src/whatsprot.class.php';
+use Whatsapp\ChatApi\WhatsProt;
 
 /**
  * For the future, other ways of getting contacts from various sources
